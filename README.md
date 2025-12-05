@@ -1,2 +1,2 @@
-# Advent of Code (solution by Paradox0312)
-See https://adventofcode.com/
+# Advent of Code (by Paradox0312)
+Personal repository of [AOC](https://adventofcode.com/) solutions.
