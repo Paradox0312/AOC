@@ -50,31 +50,28 @@ let rectangle_valide (((xa,ya),(xb,yb)):(int * int) * (int * int))(a:(int * int)
   done;
   !valide
 
-exception Not_Corner of bool
-
-let is_inside ((x,y):int * int)(a:(int * int) array) : bool =
-  let rec inside_aux ((x,y):int * int)((x0,y0):int * int)(a:(int * int) array) : unit =
-    for i = 0 to Array.length a - 1 do
-      if point_in_segment a.(i) ((x,y),(x0,y0))
-      then inside_aux (x,y) (x0,y0-1) a
-    done;
-    let valide = ref false in
-    for i = 0 to Array.length a - 1 do
-      let j = (i + 1) mod Array.length a in
-      if segment_in_segment (a.(i),a.(j)) ((x,y),(x0,y0))
-      then valide := not !valide
-    done;
-    raise (Not_Corner !valide)
-  in try inside_aux (x,y) (-1,-1) a; false
-  with Not_Corner b -> b
+let is_inside (((xa,ya),(xb,yb)):(int * int) * (int * int))(a:(int * int) array) : bool =
+  let x, y = (xa + xb)/2, (ya + yb)/2 in
+  let x0, y0 = ref (-1), ref 0 in
+  let i = ref 0 in
+  while !i < Array.length a do
+    if point_in_segment a.(!i) ((x,y),(!x0,!y0))
+    then (y0 := !y0 + 1; i := 0)
+  done;
+  let valide = ref false in
+  for i = 0 to Array.length a - 1 do
+    let j = (i + 1) mod Array.length a in
+    if segment_in_segment (a.(i),a.(j)) ((x,y),(!x0,!y0))
+    then valide := not !valide
+  done;
+  !valide
 
 let rectangle2 (a:(int * int) array) : int =
   let max_size = ref 0 in
   for i = 0 to Array.length a - 1 do
     for j = i + 1 to Array.length a - 1 do
       let size = (abs (fst a.(i) - fst a.(j)) + 1) * (abs (snd a.(i) - snd a.(j)) + 1) in
-      let mid = ((fst a.(i) + fst a.(j))/2, (snd a.(i) + snd a.(j))/2) in
-      if size > !max_size && rectangle_valide (a.(i),a.(j)) a && is_inside mid a
+      if size > !max_size && rectangle_valide (a.(i),a.(j)) a && is_inside (a.(i),a.(j)) a
       then max_size := size
     done
   done;
