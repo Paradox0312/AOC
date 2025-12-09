@@ -10,7 +10,7 @@ let rectangle (a:(int * int) array) : int =
   let max_size = ref 0 in
   for i = 0 to Array.length a - 1 do
     for j = i + 1 to Array.length a - 1 do
-      let size = abs ((fst a.(i) - fst a.(j) + 1) * (snd a.(i) - snd a.(j) + 1)) in
+      let size = (abs (fst a.(i) - fst a.(j)) + 1) * (abs (snd a.(i) - snd a.(j)) + 1) in
       if size > !max_size
       then max_size := size
     done
