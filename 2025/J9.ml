@@ -57,6 +57,7 @@ let is_inside (((xa,ya),(xb,yb)):(int * int) * (int * int))(a:(int * int) array)
   while !i < Array.length a do
     if point_in_segment a.(!i) ((x,y),(!x0,!y0))
     then (y0 := !y0 + 1; i := 0)
+    else i := !i + 1
   done;
   let valide = ref false in
   for i = 0 to Array.length a - 1 do
